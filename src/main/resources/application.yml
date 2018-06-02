@@ -1,0 +1,21 @@
+server:
+  port: 9999
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.DerbyTenSevenDialect
+  datasource:
+    platform: derby
+    tomcat:
+      test-on-borrow: true
+      driver-class-name:  org.apache.derby.jdbc.EmbeddedDriver
+      username: app
+      password: ""
+      url: jdbc:derby:jdbc:derby:derby-home/application;
+      max-active: 20
+      min-idle: 10
+      initial-size: 20
