@@ -2,8 +2,10 @@ package com.gm.kotlin.blog.controller
 
 import com.gm.kotlin.blog.domain.Blog
 import com.gm.kotlin.blog.repository.BlogRepository
-import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatus.OK
 import org.springframework.http.ResponseEntity
+import org.springframework.http.ResponseEntity.notFound
+import org.springframework.http.ResponseEntity.ok
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
@@ -24,8 +26,8 @@ class BlogController(private val blogRepository: BlogRepository) {
     fun getBlogById(@PathVariable(value = "id") articleId: Long): ResponseEntity<Blog> {
         return blogRepository.findById(articleId)
                 .map { article ->
-                    ResponseEntity.ok(article)
-                }.orElse(ResponseEntity.notFound().build())
+                    ok(article)
+                }.orElse(notFound().build())
     }
 
     @PutMapping("/blogs/{id}")
@@ -33,10 +35,9 @@ class BlogController(private val blogRepository: BlogRepository) {
 
         return blogRepository.findById(articleId)
                 .map { existingArticle ->
-                    val updatedBlog: Blog = existingArticle
-                            .copy(title = newBlog.title, content = newBlog.content)
-                    ResponseEntity.ok().body(blogRepository.save(updatedBlog))
-                }.orElse(ResponseEntity.notFound().build())
+                    val updatedBlog: Blog = existingArticle.copy(title = newBlog.title, content = newBlog.content)
+                    ok().body(blogRepository.save(updatedBlog))
+                }.orElse(notFound().build())
 
     }
 
@@ -45,8 +46,8 @@ class BlogController(private val blogRepository: BlogRepository) {
 
         return blogRepository.findById(articleId).map { article ->
             blogRepository.delete(article)
-            ResponseEntity<Void>(HttpStatus.OK)
-        }.orElse(ResponseEntity.notFound().build())
+            ResponseEntity<Void>(OK)
+        }.orElse(notFound().build())
 
     }
 }
