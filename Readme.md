@@ -34,7 +34,6 @@ All the APIs exposed can be viewed using swagger UI
 ```
 http://localhost:9999/swagger-ui.html
 ```
-The app will start running at <http://localhost:>.
 
 ##### Glossary of all the APIs exposed
 
