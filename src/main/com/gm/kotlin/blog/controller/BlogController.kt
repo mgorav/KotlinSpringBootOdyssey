@@ -23,28 +23,27 @@ class BlogController(private val blogRepository: BlogRepository) {
 
 
     @GetMapping("/blogs/{id}")
-    fun getBlogById(@PathVariable(value = "id") articleId: Long): ResponseEntity<Blog> {
-        return blogRepository.findById(articleId)
-                .map { article ->
-                    ok(article)
+    fun getBlogById(@PathVariable(value = "id") blogId: Long): ResponseEntity<Blog> {
+        return blogRepository.findById(blogId)
+                .map { blog -> ok(blog)
                 }.orElse(notFound().build())
     }
 
     @PutMapping("/blogs/{id}")
-    fun updateBlogById(@PathVariable(value = "id") articleId: Long, @Valid @RequestBody newBlog: Blog): ResponseEntity<Blog> {
+    fun updateBlogById(@PathVariable(value = "id") blogId: Long, @Valid @RequestBody newBlog: Blog): ResponseEntity<Blog> {
 
-        return blogRepository.findById(articleId)
-                .map { existingArticle ->
-                    val updatedBlog: Blog = existingArticle.copy(title = newBlog.title, content = newBlog.content)
+        return blogRepository.findById(blogId)
+                .map { existingBlog ->
+                    val updatedBlog: Blog = existingBlog.copy(title = newBlog.title, content = newBlog.content)
                     ok().body(blogRepository.save(updatedBlog))
                 }.orElse(notFound().build())
 
     }
 
     @DeleteMapping("/blogs/{id}")
-    fun deleteBlogById(@PathVariable(value = "id") articleId: Long): ResponseEntity<Void> {
+    fun deleteBlogById(@PathVariable(value = "id") blogId: Long): ResponseEntity<Void> {
 
-        return blogRepository.findById(articleId).map { article ->
+        return blogRepository.findById(blogId).map { article ->
             blogRepository.delete(article)
             ResponseEntity<Void>(OK)
         }.orElse(notFound().build())
