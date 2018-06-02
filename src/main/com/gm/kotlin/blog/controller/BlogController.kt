@@ -13,32 +13,30 @@ import javax.validation.Valid
 class BlogController(private val blogRepository: BlogRepository) {
 
     @GetMapping("/blogs")
-    fun getAllBlogs(): List<Blog> =
-            blogRepository.findAll()
+    fun getAllBlogs(): List<Blog> = blogRepository.findAll()
 
 
     @PostMapping("/blogs")
-    fun createNewBlog(@Valid @RequestBody blog: Blog): Blog =
-            blogRepository.save(blog)
+    fun createNewBlog(@Valid @RequestBody blog: Blog): Blog = blogRepository.save(blog)
 
 
     @GetMapping("/blogs/{id}")
     fun getBlogById(@PathVariable(value = "id") articleId: Long): ResponseEntity<Blog> {
-        return blogRepository.findById(articleId).map { article ->
-            ResponseEntity.ok(article)
-        }.orElse(ResponseEntity.notFound().build())
+        return blogRepository.findById(articleId)
+                .map { article ->
+                    ResponseEntity.ok(article)
+                }.orElse(ResponseEntity.notFound().build())
     }
 
     @PutMapping("/blogs/{id}")
-    fun updateBlogById(@PathVariable(value = "id") articleId: Long,
-                       @Valid @RequestBody newBlog: Blog): ResponseEntity<Blog> {
+    fun updateBlogById(@PathVariable(value = "id") articleId: Long, @Valid @RequestBody newBlog: Blog): ResponseEntity<Blog> {
 
-        return blogRepository.findById(articleId).map { existingArticle ->
-            val updatedBlog: Blog = existingArticle
-                    .copy(title = newBlog.title, content = newBlog.content)
-
-            ResponseEntity.ok().body(blogRepository.save(updatedBlog))
-        }.orElse(ResponseEntity.notFound().build())
+        return blogRepository.findById(articleId)
+                .map { existingArticle ->
+                    val updatedBlog: Blog = existingArticle
+                            .copy(title = newBlog.title, content = newBlog.content)
+                    ResponseEntity.ok().body(blogRepository.save(updatedBlog))
+                }.orElse(ResponseEntity.notFound().build())
 
     }
 
